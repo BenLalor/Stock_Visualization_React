@@ -6,14 +6,20 @@ import EarningsGraph from "./EarningsGraph";
 import testData_intraday from "./testData/intraday.json";
 import testData_earnings from "./testData/earnings.json";
 import testData_dividend from "./testData/dividend.json";
+import { ToggleButtonGroup, ToggleButton } from "react-bootstrap";
 
-function App() {
+function DataRequest() {
   const [data, setData] = useState({
     intraday: null,
     dividend: null,
     earnings: null,
   });
   const [selectedGraph, setSelectedGraph] = useState("intraday");
+  const radios = [
+    { name: "Intraday", value: "intraday" },
+    { name: "Dividend", value: "dividend" },
+    { name: "Earnings", value: "earnings" },
+  ];
 
   useEffect(() => {
     if (!data[selectedGraph]) {
@@ -59,9 +65,35 @@ function App() {
 
   return (
     <div className="App">
-      <button onClick={() => setSelectedGraph("intraday")}>Intraday</button>
-      <button onClick={() => setSelectedGraph("dividend")}>Dividend</button>
-      <button onClick={() => setSelectedGraph("earnings")}>Earnings</button>
+      <ToggleButtonGroup type="radio" name="options" defaultValue={1}>
+        <ToggleButton
+          id="tbg-radio-1"
+          value={1}
+          onChange={() => {
+            setSelectedGraph("intraday");
+          }}
+        >
+          Intraday
+        </ToggleButton>
+        <ToggleButton
+          id="tbg-radio-2"
+          value={2}
+          onChange={() => {
+            setSelectedGraph("dividend");
+          }}
+        >
+          Dividend
+        </ToggleButton>
+        <ToggleButton
+          id="tbg-radio-3"
+          value={3}
+          onChange={() => {
+            setSelectedGraph("earnings");
+          }}
+        >
+          Earnings
+        </ToggleButton>
+      </ToggleButtonGroup>
 
       {selectedGraph === "intraday" && (
         <MonthlyGraph preproccesedData={data.intraday} />
@@ -76,4 +108,4 @@ function App() {
   );
 }
 
-export default App;
+export default DataRequest;
