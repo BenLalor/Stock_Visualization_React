@@ -14,27 +14,69 @@ code {
 }
 
 /* Container for the search bar and results */
-.search-container {
-  position: relative;
-}
 
 /* Search results */
-.search-results {
+.searchResults {
+  display: flex;
+  flex-direction: column;
   position: absolute;
-  width: 100%;
-  z-index: 1;
+  top: 60px;
+  z-index: 2;
+  color: white;
+  background-color: #5f6973;
+  border: 2px solid black;
+  border: none;
+  border-radius: 10px;
 }
 
 .search-container input[type="text"] {
-  box-sizing: border-box; /* Add this line */
-  width: 99%;
+  width: 60%;
   height: 40px;
-  padding: 1%;
   font-size: 16px;
   border: none;
   border-radius: 10px;
   background-color: #5f6973;
-  margin-left: 10px;
+  margin-left: 0px;
+  color: white;
+}
 
-  margin-bottom: 10px;
+input::placeholder {
+  color: white;
+}
+
+.responsive-logo {
+  width: 20vw; /* Adjust as needed */
+  height: auto;
+  max-width: 100%;
+  float: left;
+  width: 33.33%;
+}
+
+.search-container {
+  display: flex;
+  align-items: bottom;
+  float: left;
+  width: 66.66%;
+  padding-top: 15px;
+}
+
+/* Clear floats after the columns */
+.row {
+  margin: 0;
+  display: flex;
+}
+
+.row::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.search {
+  display: flex;
+  justify-content: center;
+}
+
+.searchBar {
+  align-items: center;
 }

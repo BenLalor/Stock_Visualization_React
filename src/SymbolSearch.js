@@ -29,14 +29,15 @@ function SymbolSearch() {
         onChange={(e) => setInput(e.target.value)}
         placeholder="🔍 Stock Ticker..."
         name="searchBar"
+        className="searchBar"
       />
-      {results.map((result, index) => (
-        <div className="search-results" key={index}>
-          <p>
+      <div className="searchResults">
+        {results.map((result, index) => (
+          <p key={index}>
             {result["1. symbol"]} ({result["2. name"]})
           </p>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
