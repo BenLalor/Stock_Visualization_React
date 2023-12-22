@@ -9,21 +9,39 @@ import {
   Area,
 } from "recharts";
 
+const CustomTooltip = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="custom-tooltip">
+        <p>Date: {label}</p>
+        <p>${payload[0].value.toFixed(2)}</p>
+      </div>
+    );
+  }
+
+  return null;
+};
+
 function MonthlyGraph({ preproccesedData }) {
   const [postProcessedData, setpostProcessedData] = useState([]);
   useEffect(() => {
     if (preproccesedData) {
       const transformedData = Object.entries(
-        preproccesedData["Time Series (5min)"]
-      ).map(([date, values]) => {
-        const parsedDate = new Date(date);
-        const formattedTime =
-          parsedDate.getHours() + ":" + parsedDate.getMinutes();
-        return {
-          date: formattedTime,
-          close: parseFloat(values["4. close"]),
-        };
-      });
+        preproccesedData["Monthly Adjusted Time Series"]
+      )
+        .map(([date, values]) => {
+          const parsedDate = new Date(date);
+          const formattedTime =
+            parsedDate.getMonth() +
+            1 +
+            "/" +
+            parsedDate.getFullYear().toString().substr(-2);
+          return {
+            date: formattedTime,
+            close: parseFloat(values["4. close"]),
+          };
+        })
+        .reverse(); // Add this line
       setpostProcessedData(transformedData);
     }
   }, [preproccesedData]);
@@ -50,7 +68,7 @@ function MonthlyGraph({ preproccesedData }) {
             domain={["dataMin", "dataMax"]}
             tickFormatter={(value) => `$${value}`}
           />
-          <Tooltip />
+          <Tooltip content={<CustomTooltip />} />
         </AreaChart>
       </ResponsiveContainer>
     </div>

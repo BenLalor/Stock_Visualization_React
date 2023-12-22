@@ -84,3 +84,10 @@ input::placeholder {
   align-items: center;
   margin-top: 2%;
 }
+
+.custom-tooltip {
+  background: #0c6dfd;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+}

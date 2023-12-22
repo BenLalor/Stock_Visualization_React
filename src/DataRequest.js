@@ -3,31 +3,30 @@ import "./index.css";
 import MonthlyGraph from "./MonthlyGraph";
 import DividendGraph from "./DividendGraph";
 import EarningsGraph from "./EarningsGraph";
-import testData_intraday from "./testData/intraday.json";
+import testData_monthly from "./testData/monthly.json";
 import testData_earnings from "./testData/earnings.json";
 import testData_dividend from "./testData/dividend.json";
 import { ToggleButtonGroup, ToggleButton } from "react-bootstrap";
 
 function DataRequest() {
   const [data, setData] = useState({
-    intraday: null,
+    monthly: null,
     dividend: null,
     earnings: null,
   });
-  const [selectedGraph, setSelectedGraph] = useState("intraday");
+  const [selectedGraph, setSelectedGraph] = useState("monthly");
   const radios = [
-    { name: "Intraday", value: "intraday" },
+    { name: "Monthly", value: "monthly" },
     { name: "Dividend", value: "dividend" },
     { name: "Earnings", value: "earnings" },
   ];
 
   useEffect(() => {
     if (!data[selectedGraph]) {
-      if (selectedGraph === "intraday") {
+      if (selectedGraph === "monthly") {
         let url = new URL("https://www.alphavantage.co/query");
         let params = {
-          function: "TIME_SERIES_INTRADAY",
-          interval: "1min",
+          function: "TIME_SERIES_MONTHLY_ADJUSTED",
           symbol: "AAPL",
           apikey: "PX3W9VGLFJ6Z4MHR",
         };
@@ -43,7 +42,7 @@ function DataRequest() {
           .then((fetchedData) => {
             setData((prevData) => ({
               ...prevData,
-              [selectedGraph]: testData_intraday,
+              [selectedGraph]: testData_monthly,
             }));
           })
           .catch((error) => {
@@ -70,10 +69,10 @@ function DataRequest() {
           id="tbg-radio-1"
           value={1}
           onChange={() => {
-            setSelectedGraph("intraday");
+            setSelectedGraph("monthly");
           }}
         >
-          Intraday
+          Monthly
         </ToggleButton>
         <ToggleButton
           id="tbg-radio-2"
@@ -95,8 +94,8 @@ function DataRequest() {
         </ToggleButton>
       </ToggleButtonGroup>
 
-      {selectedGraph === "intraday" && (
-        <MonthlyGraph preproccesedData={data.intraday} />
+      {selectedGraph === "monthly" && (
+        <MonthlyGraph preproccesedData={data.monthly} />
       )}
       {selectedGraph === "dividend" && (
         <DividendGraph preproccesedData={data.dividend} />
