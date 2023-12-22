@@ -7,7 +7,7 @@ import SymbolSearch from "./SymbolSearch";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
+  <>
     <div className="row">
       <SymbolSearch className="search" />
       <img
@@ -17,5 +17,5 @@ root.render(
       />
     </div>
     <DataRequest />
-  </React.StrictMode>
+  </>
 );

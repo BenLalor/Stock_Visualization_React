@@ -12,6 +12,19 @@ import {
   Legend,
 } from "recharts";
 
+const CustomTooltip = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="custom-tooltip">
+        <p>Year: {label}</p>
+        <p>${payload[0].value.toFixed(2)}</p>
+      </div>
+    );
+  }
+
+  return null;
+};
+
 function EarningsGraph({ preproccesedData }) {
   const [postProcessedData, setpostProcessedData] = useState([]);
 
@@ -46,7 +59,7 @@ function EarningsGraph({ preproccesedData }) {
           domain={["dataMin", "dataMax"]}
           tickFormatter={(earnings) => `$${earnings}`}
         />
-        <Tooltip />
+        <Tooltip content={<CustomTooltip />} />
         <Legend />
       </BarChart>
     </ResponsiveContainer>
