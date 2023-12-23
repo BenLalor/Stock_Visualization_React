@@ -11,7 +11,7 @@ root.render(
     <div className="row">
       <SymbolSearch className="search" />
       <img
-        src={`${process.env.PUBLIC_URL}/stocker.png`}
+        src={`${process.env.PUBLIC_URL}/Stocker.png`}
         alt="Stocker Logo2"
         className="responsive-logo "
       />
