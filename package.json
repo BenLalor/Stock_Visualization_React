@@ -14,7 +14,7 @@
     "recharts": "^2.10.3",
     "web-vitals": "^2.1.4"
   },
-  "homepage": "http://BenLalor.github.io/stock-visualization-react",
+  "homepage": "http://BenLalor.github.io/Stock_Visualization_React",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
