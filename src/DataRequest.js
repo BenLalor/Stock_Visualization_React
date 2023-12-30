@@ -8,7 +8,7 @@ import testData_earnings from "./testData/earnings.json";
 import testData_dividend from "./testData/dividend.json";
 import { ToggleButtonGroup, ToggleButton } from "react-bootstrap";
 
-function DataRequest() {
+function DataRequest({ symbol }) {
   const [data, setData] = useState({
     monthly: null,
     dividend: null,
@@ -21,46 +21,50 @@ function DataRequest() {
     { name: "Earnings", value: "earnings" },
   ];
 
-  useEffect(() => {
-    if (!data[selectedGraph]) {
-      if (selectedGraph === "monthly") {
-        let url = new URL("https://www.alphavantage.co/query");
-        let params = {
-          function: "TIME_SERIES_MONTHLY_ADJUSTED",
-          symbol: "AAPL",
-          apikey: "PX3W9VGLFJ6Z4MHR",
-        };
+  useEffect(
+    () => {
+      if (!data[selectedGraph]) {
+        if (selectedGraph === "monthly") {
+          let url = new URL("https://www.alphavantage.co/query");
+          let params = {
+            function: "TIME_SERIES_MONTHLY_ADJUSTED",
+            symbol: symbol,
+            apikey: "PX3W9VGLFJ6Z4MHR",
+          };
 
-        Object.keys(params).forEach((key) =>
-          url.searchParams.append(key, params[key])
-        );
+          Object.keys(params).forEach((key) =>
+            url.searchParams.append(key, params[key])
+          );
 
-        fetch(url, {
-          method: "GET",
-        })
-          .then((response) => response.json())
-          .then((fetchedData) => {
-            setData((prevData) => ({
-              ...prevData,
-              [selectedGraph]: testData_monthly,
-            }));
+          fetch(url, {
+            method: "GET",
           })
-          .catch((error) => {
-            console.error(error);
-          });
-      } else if (selectedGraph === "dividend") {
-        setData((prevData) => ({
-          ...prevData,
-          [selectedGraph]: testData_dividend,
-        }));
-      } else if (selectedGraph === "earnings") {
-        setData((prevData) => ({
-          ...prevData,
-          [selectedGraph]: testData_earnings,
-        }));
+            .then((response) => response.json())
+            .then((fetchedData) => {
+              setData((prevData) => ({
+                ...prevData,
+                [selectedGraph]: fetchedData,
+              }));
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        } else if (selectedGraph === "dividend") {
+          setData((prevData) => ({
+            ...prevData,
+            [selectedGraph]: testData_dividend,
+          }));
+        } else if (selectedGraph === "earnings") {
+          setData((prevData) => ({
+            ...prevData,
+            [selectedGraph]: testData_earnings,
+          }));
+        }
       }
-    }
-  }, [selectedGraph]);
+    },
+    [selectedGraph],
+    symbol
+  );
 
   return (
     <div className="App">

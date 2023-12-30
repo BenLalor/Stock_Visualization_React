@@ -5,6 +5,7 @@ function SymbolSearch() {
   const [input, setInput] = useState("");
   const [results, setResults] = useState([]);
   const [selectedSymbol, setSelectedSymbol] = useState(null);
+  const [showResults, setShowResults] = useState(false);
 
   useEffect(() => {
     if (input.length > 0) {
@@ -14,12 +15,14 @@ function SymbolSearch() {
         .then((response) => response.json())
         .then((data) => {
           setResults(data.bestMatches);
+          setShowResults(true);
         })
         .catch((error) => {
           console.error(`Error fetching data: ${error}`);
         });
     } else {
       setResults([]);
+      setShowResults(false);
     }
   }, [input]);
 
@@ -35,19 +38,22 @@ function SymbolSearch() {
             name="searchBar"
             className="searchBar"
           />
-          <div className="searchResults">
-            {results.map((result, index) => (
-              <p
-                key={index}
-                onClick={() => {
-                  setSelectedSymbol(result["1. symbol"]);
-                  setInput(result["1. symbol"]); // Set input to the clicked symbol
-                }}
-              >
-                {result["1. symbol"]} ({result["2. name"]})
-              </p>
-            ))}
-          </div>
+          {showResults && (
+            <div className="searchResults">
+              {results.map((result, index) => (
+                <p
+                  key={index}
+                  onClick={() => {
+                    setSelectedSymbol(result["1. symbol"]);
+                    setInput(result["1. symbol"]);
+                    setShowResults(false);
+                  }}
+                >
+                  {result["1. symbol"]} ({result["2. name"]})
+                </p>
+              ))}
+            </div>
+          )}
         </div>
         <img
           src={`${process.env.PUBLIC_URL}/Stocker.png`}
