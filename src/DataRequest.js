@@ -9,74 +9,61 @@ import testData_dividend from "./testData/dividend.json";
 import { ToggleButtonGroup, ToggleButton } from "react-bootstrap";
 
 function DataRequest({ symbol }) {
+  // State variables
   const [data, setData] = useState({
     monthly: null,
     dividend: null,
     earnings: null,
   });
   const [selectedGraph, setSelectedGraph] = useState("monthly");
-  const radios = [
-    { name: "Monthly", value: "monthly" },
-    { name: "Dividend", value: "dividend" },
-    { name: "Earnings", value: "earnings" },
-  ];
 
-  useEffect(
-    () => {
-      if (!data[selectedGraph]) {
-        if (selectedGraph === "monthly") {
-          let url = new URL("https://www.alphavantage.co/query");
-          let params = {
-            function: "TIME_SERIES_MONTHLY_ADJUSTED",
-            symbol: symbol,
-            apikey: "PX3W9VGLFJ6Z4MHR",
-          };
+  // Effect hook to fetch data when selectedGraph or symbol changes
+  useEffect(() => {
+    // Only fetch data if it hasn't been fetched yet
+    if (!data[selectedGraph]) {
+      let url = new URL("https://www.alphavantage.co/query");
+      let params = {
+        function:
+          selectedGraph === "monthly"
+            ? "TIME_SERIES_MONTHLY_ADJUSTED"
+            : selectedGraph === "earnings"
+            ? "EARNINGS"
+            : selectedGraph.toUpperCase(),
+        symbol: symbol,
+        apikey: "PX3W9VGLFJ6Z4MHR",
+      };
 
-          Object.keys(params).forEach((key) =>
-            url.searchParams.append(key, params[key])
-          );
+      Object.keys(params).forEach((key) =>
+        url.searchParams.append(key, params[key])
+      );
 
-          fetch(url, {
-            method: "GET",
-          })
-            .then((response) => response.json())
-            .then((fetchedData) => {
-              if (fetchedData.Information) {
-                // API limit reached, use test data
-                console.error(fetchedData.Information);
-                setData((prevData) => ({
-                  ...prevData,
-                  monthly: testData_monthly,
-                  dividend: testData_dividend,
-                  earnings: testData_earnings,
-                }));
-              } else {
-                // API limit not reached, use fetched data
-                setData((prevData) => ({
-                  ...prevData,
-                  [selectedGraph]: fetchedData,
-                }));
-              }
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-        } else if (selectedGraph === "dividend") {
-          setData((prevData) => ({
-            ...prevData,
-            [selectedGraph]: testData_dividend,
-          }));
-        } else if (selectedGraph === "earnings") {
-          setData((prevData) => ({
-            ...prevData,
-            [selectedGraph]: testData_earnings,
-          }));
-        }
-      }
-    },
-    [selectedGraph],
-    symbol
-  );
+      fetch(url, {
+        method: "GET",
+      })
+        .then((response) => response.json())
+        .then((fetchedData) => {
+          if (fetchedData.Information) {
+            // API limit reached, use test data
+            console.error(fetchedData.Information);
+            setData((prevData) => ({
+              ...prevData,
+              monthly: testData_monthly,
+              dividend: testData_dividend,
+              earnings: testData_earnings,
+            }));
+          } else {
+            // API limit not reached, use fetched data
+            setData((prevData) => ({
+              ...prevData,
+              [selectedGraph]: fetchedData,
+            }));
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [selectedGraph, symbol]);
 
   return (
     <div className="App">

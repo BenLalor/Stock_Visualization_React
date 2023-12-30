@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import DataRequest from "./DataRequest";
 
 function SymbolSearch() {
+  // State variables
   const [input, setInput] = useState("");
   const [results, setResults] = useState([]);
   const [selectedSymbol, setSelectedSymbol] = useState(null);
@@ -9,6 +10,7 @@ function SymbolSearch() {
   const [apiLimitReached, setApiLimitReached] = useState(false);
   const [flashMessage, setFlashMessage] = useState("");
 
+  // Effect hook to fetch data when input changes
   useEffect(() => {
     if (input.length > 0) {
       fetch(
@@ -22,7 +24,7 @@ function SymbolSearch() {
             setResults([]);
             setShowResults(false);
             setInput("IBM");
-            setApiLimitReached(true); // set apiLimitReached to true
+            setApiLimitReached(true);
             setFlashMessage(
               "API limit reached. You can only view IBM stock data now."
             );
@@ -42,6 +44,7 @@ function SymbolSearch() {
     }
   }, [input]);
 
+  // Render component
   return (
     <>
       {flashMessage && <div className="flash-message">{flashMessage}</div>}{" "}
