@@ -6,6 +6,8 @@ function SymbolSearch() {
   const [results, setResults] = useState([]);
   const [selectedSymbol, setSelectedSymbol] = useState(null);
   const [showResults, setShowResults] = useState(false);
+  const [apiLimitReached, setApiLimitReached] = useState(false);
+  const [flashMessage, setFlashMessage] = useState("");
 
   useEffect(() => {
     if (input.length > 0) {
@@ -14,8 +16,22 @@ function SymbolSearch() {
       )
         .then((response) => response.json())
         .then((data) => {
-          setResults(data.bestMatches);
-          setShowResults(true);
+          if (data.Information) {
+            // API limit reached, hide results and disable input
+            console.error(data.Information);
+            setResults([]);
+            setShowResults(false);
+            setInput("IBM");
+            setApiLimitReached(true); // set apiLimitReached to true
+            setFlashMessage(
+              "API limit reached. You can only view IBM stock data now."
+            );
+          } else {
+            // API limit not reached, show results
+            setResults(data.bestMatches);
+            setShowResults(true);
+            setFlashMessage("");
+          }
         })
         .catch((error) => {
           console.error(`Error fetching data: ${error}`);
@@ -28,6 +44,7 @@ function SymbolSearch() {
 
   return (
     <>
+      {flashMessage && <div className="flash-message">{flashMessage}</div>}{" "}
       <div className="row">
         <div className="search-container">
           <input
@@ -37,6 +54,7 @@ function SymbolSearch() {
             placeholder="🔍 Stock Ticker..."
             name="searchBar"
             className="searchBar"
+            disabled={apiLimitReached}
           />
           {showResults && (
             <div className="searchResults">
@@ -61,11 +79,9 @@ function SymbolSearch() {
           className="responsive-logo "
         />
       </div>
-      {selectedSymbol && (
-        <div className="dataRequestContainer">
-          <DataRequest symbol={selectedSymbol} />
-        </div>
-      )}
+      <div className="dataRequestContainer">
+        <DataRequest symbol={selectedSymbol} />
+      </div>
     </>
   );
 }
