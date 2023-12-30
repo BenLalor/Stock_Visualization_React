@@ -9,7 +9,9 @@ import {
   Area,
 } from "recharts";
 
+// Custom tooltip for the graph
 const CustomTooltip = ({ active, payload, label }) => {
+  // Only show tooltip if there's active data
   if (active && payload && payload.length) {
     return (
       <div className="custom-tooltip">
@@ -22,14 +24,21 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null;
 };
 
+// Component for displaying a monthly graph
 function MonthlyGraph({ preproccesedData }) {
+  // State for storing the processed data
   const [postProcessedData, setpostProcessedData] = useState([]);
+
+  // Process the data when it changes
   useEffect(() => {
+    // Only process if there's data
     if (preproccesedData) {
+      // Transform the data into a format suitable for the graph
       const transformedData = Object.entries(
         preproccesedData["Monthly Adjusted Time Series"]
       )
         .map(([date, values]) => {
+          // Parse the date and format it as "month/year"
           const parsedDate = new Date(date);
           const formattedTime =
             parsedDate.getMonth() +
@@ -41,11 +50,12 @@ function MonthlyGraph({ preproccesedData }) {
             close: parseFloat(values["4. close"]),
           };
         })
-        .reverse(); // Add this line
+        .reverse(); // Reverse the data so it's in chronological order
       setpostProcessedData(transformedData);
     }
   }, [preproccesedData]);
 
+  // Render the graph
   return (
     <div className="App">
       <ResponsiveContainer width="100%" height={400}>

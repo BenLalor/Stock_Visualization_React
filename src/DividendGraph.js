@@ -9,8 +9,9 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
-
+// Custom tooltip for the graph
 const CustomTooltip = ({ active, payload, label }) => {
+  // Only show tooltip if there's active data
   if (active && payload && payload.length) {
     return (
       <div className="custom-tooltip">
@@ -23,12 +24,17 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null;
 };
 
+// Component for displaying a dividend graph
 function DividendGraph({ preproccesedData }) {
+  // State for storing the processed data
   const [data, setData] = useState([]);
 
+  // Process the data when it changes
   useEffect(() => {
+    // Only process if there's data
     if (preproccesedData) {
       console.log("preproccessed data: " + preproccesedData);
+      // Transform the data into a format suitable for the graph
       const monthlyAdjustedTimeSeries =
         preproccesedData["Monthly Adjusted Time Series"];
 
@@ -43,16 +49,18 @@ function DividendGraph({ preproccesedData }) {
           value: parseFloat(value),
         }))
         .filter((item) => item.value !== 0.0) // filter out objects with 0.000 dividend amount
-        .reverse(); // Add this line
+        .reverse(); // Reverse the data so it's in chronological order
 
       setData(transformedData);
     }
   }, [preproccesedData]);
 
+  // Function to remove months with no dividends
   function removeNonDividendMonths(data) {
     return data.filter((dataPoint) => dataPoint.value > 0);
   }
 
+  // Render the graph
   return (
     <ResponsiveContainer width="100%" height={400}>
       <BarChart data={data}>
