@@ -8,14 +8,6 @@ import SymbolSearch from "./SymbolSearch";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <>
-    <div className="row">
-      <SymbolSearch className="search" />
-      <img
-        src={`${process.env.PUBLIC_URL}/Stocker.png`}
-        alt="Stocker Logo2"
-        className="responsive-logo "
-      />
-    </div>
-    <DataRequest />
+    <SymbolSearch className="search" />
   </>
 );
