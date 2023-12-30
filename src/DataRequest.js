@@ -41,10 +41,22 @@ function DataRequest({ symbol }) {
           })
             .then((response) => response.json())
             .then((fetchedData) => {
-              setData((prevData) => ({
-                ...prevData,
-                [selectedGraph]: fetchedData,
-              }));
+              if (fetchedData.Information) {
+                // API limit reached, use test data
+                console.error(fetchedData.Information);
+                setData((prevData) => ({
+                  ...prevData,
+                  monthly: testData_monthly,
+                  dividend: testData_dividend,
+                  earnings: testData_earnings,
+                }));
+              } else {
+                // API limit not reached, use fetched data
+                setData((prevData) => ({
+                  ...prevData,
+                  [selectedGraph]: fetchedData,
+                }));
+              }
             })
             .catch((error) => {
               console.error(error);
