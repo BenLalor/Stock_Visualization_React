@@ -5,7 +5,7 @@ function SymbolSearch() {
   // State variables
   const [input, setInput] = useState("");
   const [results, setResults] = useState([]);
-  const [selectedSymbol, setSelectedSymbol] = useState(null);
+  const [selectedSymbol, setSelectedSymbol] = useState("IBM");
   const [showResults, setShowResults] = useState(false);
   const [apiLimitReached, setApiLimitReached] = useState(false);
   const [flashMessage, setFlashMessage] = useState("");
@@ -54,7 +54,7 @@ function SymbolSearch() {
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="🔍 Stock Ticker..."
+            placeholder="🔍 Search For Stock Ticker..... (IBM)"
             name="searchBar"
             className="searchBar"
             disabled={apiLimitReached}
