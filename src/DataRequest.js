@@ -24,7 +24,7 @@ function DataRequest({ symbol }) {
       let url = new URL("https://www.alphavantage.co/query");
       let params = {
         function:
-          selectedGraph === "monthly"
+          selectedGraph === "monthly" || selectedGraph === "dividend"
             ? "TIME_SERIES_MONTHLY_ADJUSTED"
             : selectedGraph === "earnings"
             ? "EARNINGS"
